@@ -298,3 +298,30 @@ for(j in 1:12){
 
 
 #the end of QuestionD#######################################################################
+
+#Question e#################################################################################
+library(wordnet)
+setDict("C:/Program Files (x86)/WordNet/2.1/dict")
+Sys.setenv(WNHOME = "C:/Program Files (x86)/WordNet/2.1")
+getDict()
+library(quanteda)
+Chapter1 <- DocumentTermMatrix(SATstop[8])
+nouns <- list()
+verbs <- list()
+
+imax <- length(Chapter1$dimnames$Terms)
+for (i in 1:imax) {
+  filter <- getTermFilter("ExactMatchFilter", Chapter1$dimnames$Terms[i], TRUE) 
+  if(nchar(Chapter1$dimnames$Terms[i])>4){
+    terms <- getIndexTerms("VERB", 5, filter) 
+    sapply(terms, getLemma)
+    verbs <- c(verbs,sapply(terms, getLemma))
+    
+    terms <- getIndexTerms("NOUN", 5, filter) 
+    sapply(terms, getLemma)
+    nouns <- c(nouns,sapply(terms, getLemma))
+  }
+}
+nouns
+verbs
+#the end of Question e
