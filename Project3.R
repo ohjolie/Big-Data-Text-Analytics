@@ -2,6 +2,153 @@ library(tm)
 library(quanteda)
 library(readtext)
 library(tokenizers)
+#Question A
+##
+#read data
+##
+
+setwd("F://workplace for R")
+getwd()
+SAT <- VCorpus(DirSource(".",ignore.case = TRUE,mode="text",encoding="UTF-8"))
+
+#display SAT
+SAT
+inspect(SAT)
+str(SAT)
+
+#Extract a document from SAT
+test1<-SAT[[2]]
+test1
+
+SATtdm <- DocumentTermMatrix(SAT)
+SATtdm
+inspect(SATtdm[1:6,1:12])
+
+test1tf <- termFreq(test1)
+test1tf
+
+#Corpus Management
+SATlow <- tm_map(SAT,content_transformer(tolower))
+SATlow
+
+removeNumPunct <-
+function(x) gsub("[^[:alpha:][:space:]]*","", x)
+SATcl <- tm_map(SATlow,content_transformer(removeNumPunct))
+
+myStopWords <- c(stopwords('english'))
+myStopWords
+
+SATstop <- tm_map(SATcl,removeWords,myStopWords)
+inspect(SATstop[1])
+
+SATtdm2 <- TermDocumentMatrix(SATstop,control = list(wordlengths = c(1,Inf)))
+SATtdm2
+
+
+
+freqTerms <- findFreqTerms(SATtdm2,lowfreq = 4)
+freqTerms
+
+##strange result
+statesAssoc <- findAssocs(SATtdm2,"states",0.5)
+statesAssoc
+
+termFreq1 <- rowSums(as.matrix(SATtdm2))
+termFreqsub <-subset(termFreq1,termFreq1>=6)
+termFreqdf <- as.data.frame(names(termFreq1),freq = termFreq1)
+termFreq1
+
+##remove Sparse Terms
+SATtdm2
+Sparsetdm2 <- removeSparseTerms(SATtdm2,sparse = 0.75)
+inspect(Sparsetdm2)
+Sparsetdm2
+
+##Finding Informative Words
+test2 <- SATstop[[1]]
+inspect(test2)
+
+termFreqSub2<-subset(termFreq1, termFreq1 >= 40)
+fit <- hclust(dist(termFreqSub2,method = "euclidean"), method = "ward.D2")
+plot(fit)
+
+
+m1 <- as.matrix(termFreq1)
+word.freq <- sort(rowSums(m1),decreasing = T)
+word.freq
+
+
+#wordcloud
+library(wordcloud)
+
+pal <- brewer.pal(9,"BuGn")
+pal <- pal[-(1:4)]
+wordcloud(words = names(word.freq),freq = word.freq,min.freq = 20,random.color = F,colors = pal)
+
+SATdtm <- DocumentTermMatrix(SATstop)
+freq <- colSums(as.matrix(SATdtm))
+SATdtm
+length(freq)
+
+ord <- order(freq,decreasing = TRUE)
+freq[head(ord)]
+freq[tail(ord)]
+
+
+SATdtmr <- DocumentTermMatrix(SATstop,control = list(wordLengths = c(4,20)))
+SATdtmr 
+
+freqr <-colSums(as.matrix(SATdtmr))
+ordr <- order(freqr,decreasing = TRUE)
+freqr[head(ordr)]
+freqr[tail(ordr)]
+
+
+#Tokenization
+library(quanteda)
+SAT2 <- SATcl$content[1]
+SAT2
+SAT2txt <-SAT2[[1]]$content
+SAT2txt
+SAT2tokens <- tokens(SAT2txt)
+SAT2tokens
+  
+  
+  
+SAT1 <- SAT$content[1]
+SAT1
+SAT1txt <- SAT1[[1]]$content
+SAT1txt
+
+SAT1tokens <- tokens(SAT1txt)
+SAT1tokens
+
+
+#Sentiment Analysis
+library(syuzhet)
+SAT1Sent <- syuzhet::get_nrc_sentiment(SAT1txt)
+SAT1Sent
+
+SAT1sdt <- rowSums(SAT1Sent)
+SAT1sdt[1:50]
+SAT1rdt<-rowSums(SAT1Sent)
+SAT1rdt[1:50]
+SAT1CDT<-colSums(SAT1Sent)
+SAT1CDT
+
+#Text weighting
+SATdfm <- dfm(SAT1tokens)
+SATfreq <-docfreq(SATdfm)
+SATfreq
+
+SATweights2 <- dfm_weight(SATdfm,scheme="prop")
+str(SATweights2)
+
+SATtfidf <- dfm_tfidf(SATdfm,scheme_tf = "count",scheme_df = "inverse")
+SATtfidf@i
+#the end of Question A
+
+
 
 #Question B
 data <- readtext('DrJekyllAndMrHyde.txt')
