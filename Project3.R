@@ -295,4 +295,4 @@ for (i in 1:imax) {
     print(SATdtmr$dimnames$Terms[i])
   }
 }
-
+#the end of QuestionD#######################################################################
