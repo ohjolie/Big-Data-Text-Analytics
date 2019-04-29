@@ -281,18 +281,20 @@ wordcloud(words = names(word.freq), freq = word.freq, min.freq =  3, random.orde
 
 #Question D
 ##find longest words
-SATdtmr
-imax <- length(SATdtmr$dimnames$Terms)
-Tlength <- nchar(SATdtmr$dimnames$Terms)
-longest <- max(nchar(SATdtmr$dimnames$Terms))
-#SATerm <- tokens(SAT1txt,"word",remove_numbers = TRUE, remove_punct = TRUE,
-#                remove_symbols = TRUE, remove_separators = TRUE,
-#                 remove_twitter = TRUE, remove_hyphens = TRUE, remove_url = TRUE)
-#SATerm
-
-for (i in 1:imax) {
-  if(Tlength[i]==longest){
-    print(SATdtmr$dimnames$Terms[i])
+for(j in 1:12){
+  Chapterj <- DocumentTermMatrix(SATstop[j])
+  #Chapterj$dimnames$Terms
+  imax <- length(Chapterj$dimnames$Terms)
+  Tlength <- nchar(Chapterj$dimnames$Terms)
+  longest <- max(nchar(Chapterj$dimnames$Terms))
+  for (i in 1:imax) {
+    if(Tlength[i]==longest){
+      print(c("charpter",j))
+      print(Chapterj$dimnames$Terms[i])
+    }
   }
+  
 }
+
+
 #the end of QuestionD#######################################################################
