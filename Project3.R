@@ -207,20 +207,7 @@ ws
 inspect(ws)
 str(ws)
 test1<-ws[[1]]
-##
-start<-ws[[12]]
-ch1<-ws[[8]]
-ch2<-ws[[7]]
-ch3<-ws[[1]]
-ch4<-ws[[9]]
-ch5<-ws[[6]]
-ch6<-ws[[5]]
-ch7<-ws[[4]]
-ch8<-ws[[11]]
-ch9<-ws[[2]]
-ch10<-ws[[3]]
-end<-ws[[10]]
-##
+
 wsdtm<-DocumentTermMatrix(ws)
 wsdtm
 wstdm<-TermDocumentMatrix(ws)
@@ -243,6 +230,19 @@ myStopWords
 
 wsstop<-tm_map(wscl, removeWords, myStopWords)
 inspect(wsstop[1:12])
+
+ch0<-wsstop[[12]]
+ch1<-wsstop[[8]]
+ch2<-wsstop[[7]]
+ch3<-wsstop[[1]]
+ch4<-wsstop[[9]]
+ch5<-wsstop[[6]]
+ch6<-wsstop[[5]]
+ch7<-wsstop[[4]]
+ch8<-wsstop[[11]]
+ch9<-wsstop[[2]]
+ch10<-wsstop[[3]]
+ch11<-wsstop[[10]]
 
 wstdm2<-TermDocumentMatrix(wsstop[1], control = list(wordlengths = c(1, Inf)))
 wstdm2
