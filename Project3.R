@@ -199,6 +199,8 @@ for (n in 1:10) {
 #end of Question B#######################################################################
 
 # Question C#############################################################################
+setwd("/Users/zhuolinyang/Documents/RWorkspace/Project 3/Chapter")
+
 ws<-VCorpus(DirSource(".", ignore.case = TRUE, mode = "text"))
 ws
 
@@ -206,17 +208,18 @@ inspect(ws)
 str(ws)
 test1<-ws[[1]]
 ##
-pg1<-ws[[13]]
-pg2<-ws[[9]]
-pg3<-ws[[8]]
-pg4<-ws[[1]]
-pg5<-ws[[10]]
-pg6<-ws[[6]]
-pg7<-ws[[5]]
-pg8<-ws[[4]]
-pg9<-ws[[12]]
-pg10<-ws[[2]]
-pg11<-ws[[3]]
+start<-ws[[12]]
+ch1<-ws[[8]]
+ch2<-ws[[7]]
+ch3<-ws[[1]]
+ch4<-ws[[9]]
+ch5<-ws[[6]]
+ch6<-ws[[5]]
+ch7<-ws[[4]]
+ch8<-ws[[11]]
+ch9<-ws[[2]]
+ch10<-ws[[3]]
+end<-ws[[10]]
 ##
 wsdtm<-DocumentTermMatrix(ws)
 wsdtm
@@ -239,7 +242,7 @@ myStopWords<-c(stopwords('english'))
 myStopWords
 
 wsstop<-tm_map(wscl, removeWords, myStopWords)
-inspect(wsstop[1:13])
+inspect(wsstop[1:12])
 
 wstdm2<-TermDocumentMatrix(wsstop[1], control = list(wordlengths = c(1, Inf)))
 wstdm2
@@ -260,9 +263,6 @@ wstdm2
 sparsetdm2<-removeSparseTerms(wstdm2, sparse = 0.75)
 inspect(sparsetdm2)
 sparsetdm2
-
-#p3stop<-wsstop[[1]]
-#inspect(p3stop)
 
 termFreqSub2<-subset(termFreq, termFreq >= 40)
 fit <- hclust(dist(termFreqSub,method = "euclidean"), method = "ward.D2")
