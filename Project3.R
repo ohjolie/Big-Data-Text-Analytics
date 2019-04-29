@@ -2,7 +2,14 @@ library(tm)
 library(quanteda)
 library(readtext)
 library(tokenizers)
-#Question A
+
+
+
+
+#Question A#########################################################################################
+
+
+
 ##
 #read data
 ##
@@ -146,11 +153,11 @@ str(SATweights2)
 
 SATtfidf <- dfm_tfidf(SATdfm,scheme_tf = "count",scheme_df = "inverse")
 SATtfidf@i
-#the end of Question A
+#the end of Question A#################################################################################
 
 
 
-#Question B
+#Question B############################################################################################
 data <- readtext('DrJekyllAndMrHyde.txt')
 
 #################b###############
@@ -189,9 +196,9 @@ for (n in 1:10) {
       print(sentence2[[1]][i])} 
   } 
 }
-#end of Question B
+#end of Question B#######################################################################
 
-# Question C
+# Question C#############################################################################
 ws<-VCorpus(DirSource(".", ignore.case = TRUE, mode = "text"))
 ws
 
@@ -270,4 +277,22 @@ library("wordcloud")
 pal<-brewer.pal(9, "BuGn")
 pal<-pal[-(1:4)]
 wordcloud(words = names(word.freq), freq = word.freq, min.freq =  3, random.order = F, colors = pal)
-#end of Question C
+#end of Question C######################################################################################
+
+#Question D
+##find longest words
+SATdtmr
+imax <- length(SATdtmr$dimnames$Terms)
+Tlength <- nchar(SATdtmr$dimnames$Terms)
+longest <- max(nchar(SATdtmr$dimnames$Terms))
+#SATerm <- tokens(SAT1txt,"word",remove_numbers = TRUE, remove_punct = TRUE,
+#                remove_symbols = TRUE, remove_separators = TRUE,
+#                 remove_twitter = TRUE, remove_hyphens = TRUE, remove_url = TRUE)
+#SATerm
+
+for (i in 1:imax) {
+  if(Tlength[i]==longest){
+    print(SATdtmr$dimnames$Terms[i])
+  }
+}
+
