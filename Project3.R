@@ -302,8 +302,25 @@ for (i in 1:imax) {
 }
 nouns
 verbs
-#the end of Question e
-#Question G
-wstdm3<-TermDocumentMatrix(ch1, control = list(wordLengths = c(7, Inf)))
-term_freq<-rowSums(as.matrix(wstdm3))
-#the end of Question G
+#the end of Question e###################################################
+
+#Question G###############################################################
+#install.packages("RWeka")
+library(RWeka)
+#bigrams
+BigramTokenizer <- function(y) NGramTokenizer(y, Weka_control(min = 2, max = 2))
+bigram = TermDocumentMatrix(ch1,control = list(wordLengths = c(7, Inf), tokenize = BigramTokenizer))
+freq = sort(rowSums(as.matrix(bigram)),decreasing = TRUE)
+freq.df = data.frame(word=names(freq), freq=freq)
+head(freq.df, 20)
+pal=brewer.pal(8,"Blues")
+pal=pal[-(1:3)]
+wordcloud(freq.df$word,freq.df$freq,max.words=100,random.order = F, colors=pal)
+#trigrams
+TrigramTokenizer <- function(z) NGramTokenizer(z, Weka_control(min = 3, max = 3))
+trigram = TermDocumentMatrix(ch1,control = list(wordLengths = c(7, Inf), tokenize = TrigramTokenizer))
+freq = sort(rowSums(as.matrix(trigram)),decreasing = TRUE)
+freq.df = data.frame(word=names(freq), freq=freq)
+head(freq.df, 20)
+wordcloud(freq.df$word,freq.df$freq,max.words=100,random.order = F, colors=pal)
+#the end of Question G#############################################################
