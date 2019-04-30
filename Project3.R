@@ -202,69 +202,47 @@ for (n in 1:10) {
 setwd("/Users/zhuolinyang/Documents/RWorkspace/Project 3/Chapter")
 
 ws<-VCorpus(DirSource(".", ignore.case = TRUE, mode = "text"))
-ws
-
-inspect(ws)
-str(ws)
-test1<-ws[[1]]
-
-wsdtm<-DocumentTermMatrix(ws)
-wsdtm
-wstdm<-TermDocumentMatrix(ws)
-wstdm
-inspect(wstdm[1:12, 1])
-
-test1tf<-termFreq(test1)
-test1tf
-test1df<-as.data.frame(test1tf)
-test1df
 
 wslow<-tm_map(ws, content_transformer(tolower))
-wslow
 
 removeNumPunct<-function(x) gsub("[^[:alpha:][:space:]]*", "", x)
 wscl<-tm_map(wslow, content_transformer(removeNumPunct))
 
 myStopWords<-c(stopwords('english'))
-myStopWords
 
 wsstop<-tm_map(wscl, removeWords, myStopWords)
 inspect(wsstop[1:12])
 
-ch0<-wsstop[[12]]
-ch1<-wsstop[[8]]
-ch2<-wsstop[[7]]
-ch3<-wsstop[[1]]
-ch4<-wsstop[[9]]
-ch5<-wsstop[[6]]
-ch6<-wsstop[[5]]
-ch7<-wsstop[[4]]
-ch8<-wsstop[[11]]
-ch9<-wsstop[[2]]
-ch10<-wsstop[[3]]
-ch11<-wsstop[[10]]
+ch0<-wsstop[12]
+ch1<-wsstop[8]
+ch2<-wsstop[7]
+ch3<-wsstop[1]
+ch4<-wsstop[9]
+ch5<-wsstop[6]
+ch6<-wsstop[5]
+ch7<-wsstop[4]
+ch8<-wsstop[11]
+ch9<-wsstop[2]
+ch10<-wsstop[3]
+ch11<-wsstop[10]
 
-wstdm2<-TermDocumentMatrix(wsstop[1], control = list(wordlengths = c(1, Inf)))
-wstdm2
+wstdm<-TermDocumentMatrix(wsstop[1], control = list(wordLengths = c(1, Inf)))
 
-freqTerms<-findFreqTerms(wstdm2, lowfreq = 4)
+freqTerms<-findFreqTerms(wstdm, lowfreq = 4)
 freqTerms
 
-statesAssoc<-findAssocs(wstdm2, "states", 0.5)
+statesAssoc<-findAssocs(wstdm, "states", 0.5)
 statesAssoc
 
-termFreq<-rowSums(as.matrix(wstdm2))
+termFreq<-rowSums(as.matrix(wstdm))
 termFreqSub<-subset(termFreq, termFreq >= 6)
 termFreqdf<-as.data.frame(names(termFreq), freq = termFreq)
 termFreq
 
-wstdm2
+sparsetdm<-removeSparseTerms(wstdm, sparse = 0.75)
+inspect(sparsetdm)
 
-sparsetdm2<-removeSparseTerms(wstdm2, sparse = 0.75)
-inspect(sparsetdm2)
-sparsetdm2
-
-termFreqSub2<-subset(termFreq, termFreq >= 40)
+termFreqSub<-subset(termFreq, termFreq >= 3)
 fit <- hclust(dist(termFreqSub,method = "euclidean"), method = "ward.D2")
 plot(fit)
 
@@ -276,7 +254,7 @@ library("wordcloud")
 
 pal<-brewer.pal(9, "BuGn")
 pal<-pal[-(1:4)]
-wordcloud(words = names(word.freq), freq = word.freq, min.freq =  3, random.order = F, colors = pal)
+wordcloud(words = names(word.freq), freq = word.freq, min.freq = 3, random.order = F, colors = pal)
 #end of Question C######################################################################################
 
 #Question D
@@ -325,3 +303,7 @@ for (i in 1:imax) {
 nouns
 verbs
 #the end of Question e
+#Question G
+wstdm3<-TermDocumentMatrix(ch1, control = list(wordLengths = c(7, Inf)))
+term_freq<-rowSums(as.matrix(wstdm3))
+#the end of Question G
