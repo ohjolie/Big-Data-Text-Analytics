@@ -238,7 +238,7 @@ for(i in 0:11){
   termFreqdf<-as.data.frame(names(termFreq), freq = termFreq)
   
   #generate and display dendrogram
-  termFreqSub<-subset(termFreq, termFreq >= 3)
+  termFreqSub<-subset(termFreq, termFreq >= 5)
   fit <- hclust(dist(termFreqSub,method = "euclidean"), method = "ward.D2")
   plot(fit)
   
