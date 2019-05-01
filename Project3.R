@@ -202,10 +202,13 @@ for (n in 1:10) {
 #end of Question B#######################################################################
 
 # Question C#############################################################################
+#set workspace
 setwd("/Users/zhuolinyang/Documents/RWorkspace/Project 3/Chapter")
 
+#get data from file
 ws<-VCorpus(DirSource(".", ignore.case = TRUE, mode = "text"))
 
+#clean data
 wslow<-tm_map(ws, content_transformer(tolower))
 
 removeNumPunct<-function(x) gsub("[^[:alpha:][:space:]]*", "", x)
@@ -216,6 +219,7 @@ myStopWords<-c(stopwords('english'))
 wsstop<-tm_map(wscl, removeWords, myStopWords)
 inspect(wsstop[1:12])
 
+#seperate each chapter
 ch0<-wsstop[12]
 ch1<-wsstop[8]
 ch2<-wsstop[7]
@@ -229,35 +233,24 @@ ch9<-wsstop[2]
 ch10<-wsstop[3]
 ch11<-wsstop[10]
 
-wstdm<-TermDocumentMatrix(wsstop[1], control = list(wordLengths = c(1, Inf)))
-
-freqTerms<-findFreqTerms(wstdm, lowfreq = 4)
-freqTerms
-
-statesAssoc<-findAssocs(wstdm, "states", 0.5)
-statesAssoc
-
-termFreq<-rowSums(as.matrix(wstdm))
-termFreqSub<-subset(termFreq, termFreq >= 6)
-termFreqdf<-as.data.frame(names(termFreq), freq = termFreq)
-termFreq
-
-sparsetdm<-removeSparseTerms(wstdm, sparse = 0.75)
-inspect(sparsetdm)
-
-termFreqSub<-subset(termFreq, termFreq >= 3)
-fit <- hclust(dist(termFreqSub,method = "euclidean"), method = "ward.D2")
-plot(fit)
-
-word.freq<-sort(termFreq, decreasing = T)
-word.freq
-
-#install.packages("wordcloud")
-library("wordcloud")
-
-pal<-brewer.pal(9, "BuGn")
-pal<-pal[-(1:4)]
-wordcloud(words = names(word.freq), freq = word.freq, min.freq = 3, random.order = F, colors = pal)
+#generate and display dendrogram and the WordCloud
+for(i in 0:11){
+  wstdm<-TermDocumentMatrix(get(paste("ch", i, sep = "")), control = list(wordLengths = c(1, Inf)))
+  
+  termFreq<-rowSums(as.matrix(wstdm))
+  termFreqdf<-as.data.frame(names(termFreq), freq = termFreq)
+  
+  #generate and display dendrogram
+  termFreqSub<-subset(termFreq, termFreq >= 5)
+  fit <- hclust(dist(termFreqSub,method = "euclidean"), method = "ward.D2")
+  plot(fit)
+  
+  #generate and display WordCloud
+  word.freq<-sort(termFreq, decreasing = T)
+  pal<-brewer.pal(9, "BuGn")
+  pal<-pal[-(1:4)]
+  wordcloud(words = names(word.freq), freq = word.freq, min.freq = 3, random.order = F, colors = pal)
+}
 #end of Question C######################################################################################
 
 #Question D
@@ -299,6 +292,9 @@ sentence <- list()
 sentence_words <- list()
 sentence_length <- list()
 longest <- list()
+shortest <- list()
+longest_sentence <- list()
+shortest_sentence <- list()
 for(i in 1:12){
  chap.clean[[i]] <- gsub("\r?\n|\r", ' ',chapter[[i]]$text)
  sentence[i] <- tokenize_sentences(chap.clean[[i]])
@@ -308,6 +304,10 @@ for(i in 1:12){
  longest_sentence[[i]] <- sentence[[i]][which(sentence_length[[i]][]==longest[i])]
  print(paste0("The longest sentence in chapter ", i ," is:"))
  print(longest_sentence[[i]])
+ shortest[i] <- min(sentence_length[[i]])
+ shortest_sentence[[i]] <- sentence[[i]][which(sentence_length[[i]][]==shortest[i])]
+ print(paste0("The shortest sentence in chapter ", i ," is:"))
+ print(shortest_sentence[[i]])
 } 
 
 
