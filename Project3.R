@@ -2,7 +2,7 @@ library(tm)
 library(quanteda)
 library(readtext)
 library(tokenizers)
-
+library(wordcloud)
 
 
 
