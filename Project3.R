@@ -2,7 +2,10 @@ library(tm)
 library(quanteda)
 library(readtext)
 library(tokenizers)
-
+library(corpustools)
+library(stringi)
+library(tidytext)
+library(wordcloud)
 
 
 
@@ -368,3 +371,29 @@ freq.df = data.frame(word=names(freq), freq=freq)
 head(freq.df, 20)
 wordcloud(freq.df$word,freq.df$freq,max.words=100,random.order = F, colors=pal)
 #the end of Question G#############################################################
+
+#Question H###############################################################
+
+#Corpus tools
+tc = create_tcorpus(gsub("[^[:alpha:][:space:]]*","", readtext('StoryOfTheDoor.txt',encoding="UTF-8")))
+tc$preprocess('token', 'stem', remove_stopwords = TRUE, use_stemming = TRUE)
+dtm<-as.matrix(tc$dtm(feature="stem"))
+dtm
+#words occur together with word door
+words <= tc$feature_associations(query="door*")
+words
+
+#Stringi
+text<-gsub("\n"," ", readtext('StoryOfTheDoor.txt',encoding="UTF-8"))
+stri_reverse(text)
+stri_trim(text)
+stri_split_boundaries(stri_trim(text), stri_opts_brkiter(type="sentence"))
+stri_stats_general(text)
+
+#quanteda
+
+
+
+#the end of Question H#############################################################
+
+
