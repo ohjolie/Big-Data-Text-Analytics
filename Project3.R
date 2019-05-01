@@ -274,6 +274,39 @@ for(j in 1:12){
   
 }
 
+#find the longest sentence in each chapter
+setwd("/Users/jolie/Documents/Rworkspace/Big-Data-Text-Analytics/txt")
+getwd()
+chapter <- list()
+chapter[[1]] <- readtext('TheStart.txt')
+chapter[[2]] <- readtext('StoryOfTheDoor.txt')
+chapter[[3]] <- readtext('SearchForMrHYDE.txt')
+chapter[[4]] <- readtext('DrJekyllWasQuiteAtEase.txt')
+chapter[[5]] <- readtext('TheCarewMurderCase.txt')
+chapter[[6]] <- readtext('IncidentOfTheLetter.txt')
+chapter[[7]] <- readtext('IncidentOfDrLanyon.txt')
+chapter[[8]] <- readtext('IncidentOfDrLanyon.txt')
+chapter[[9]] <- readtext('TheLastNight.txt')
+chapter[[10]] <- readtext('DrLanyob’sNarrative.txt')
+chapter[[11]] <- readtext('HenryJekyll’sFullStatementOfTheCase.txt')
+chapter[[12]] <- readtext('TheEnd.txt')
+
+chap.clean <- list()
+sentence <- list()
+sentence_words <- list()
+sentence_length <- list()
+longest <- list()
+for(i in 1:12){
+ chap.clean[[i]] <- gsub("\r?\n|\r", ' ',chapter[[i]]$text)
+ sentence[i] <- tokenize_sentences(chap.clean[[i]])
+ sentence_words[[i]] <- tokenize_words(sentence[[i]])
+ sentence_length[[i]] <- sapply(sentence_words[[i]], length)
+ longest[i] <- max(sentence_length[[i]])
+ longest_sentence[[i]] <- sentence[[i]][which(sentence_length[[i]][]==longest[i])]
+ print(paste0("The longest sentence in chapter ", i ," is:"))
+ print(longest_sentence[[i]])
+} 
+
 
 #the end of QuestionD#######################################################################
 
