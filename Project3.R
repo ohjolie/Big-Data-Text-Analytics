@@ -337,6 +337,17 @@ nouns
 verbs
 #the end of Question e###################################################
 
+
+#Question F###############################################################
+library(zipfR)
+WFS.spc <- spc(Vm = word.freq,m=1:length(word.freq))
+#WFS.spc
+plot(WFS.spc)
+with(WFS.spc, plot(m, Vm, main="Frequency Spectrum"))
+#the end of Question F###################################################
+
+
+
 #Question G###############################################################
 #install.packages("RWeka")
 library(RWeka)
