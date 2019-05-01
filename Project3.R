@@ -296,6 +296,9 @@ sentence <- list()
 sentence_words <- list()
 sentence_length <- list()
 longest <- list()
+shortest <- list()
+longest_sentence <- list()
+shortest_sentence <- list()
 for(i in 1:12){
  chap.clean[[i]] <- gsub("\r?\n|\r", ' ',chapter[[i]]$text)
  sentence[i] <- tokenize_sentences(chap.clean[[i]])
@@ -305,6 +308,10 @@ for(i in 1:12){
  longest_sentence[[i]] <- sentence[[i]][which(sentence_length[[i]][]==longest[i])]
  print(paste0("The longest sentence in chapter ", i ," is:"))
  print(longest_sentence[[i]])
+ shortest[i] <- min(sentence_length[[i]])
+ shortest_sentence[[i]] <- sentence[[i]][which(sentence_length[[i]][]==shortest[i])]
+ print(paste0("The shortest sentence in chapter ", i ," is:"))
+ print(shortest_sentence[[i]])
 } 
 
 
