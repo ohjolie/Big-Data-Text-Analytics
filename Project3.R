@@ -352,24 +352,38 @@ with(WFS.spc, plot(m, Vm, main="Frequency Spectrum"))
 
 
 #Question G###############################################################
-#install.packages("RWeka")
-library(RWeka)
+#install.packages("SentimentAnalysis")
+library(SentimentAnalysis)
+
 #bigrams
-BigramTokenizer <- function(y) NGramTokenizer(y, Weka_control(min = 2, max = 2))
-bigram = TermDocumentMatrix(ch1,control = list(wordLengths = c(7, Inf), tokenize = BigramTokenizer))
-freq = sort(rowSums(as.matrix(bigram)),decreasing = TRUE)
+bigram_tdm <- TermDocumentMatrix(ch1, control=list(wordLengths = c(7, Inf), tokenize=function(x) ngram_tokenize(x, ngmin=2, ngmax=2)))
+freq = sort(rowSums(as.matrix(bigram_tdm)),decreasing = TRUE)
 freq.df = data.frame(word=names(freq), freq=freq)
 head(freq.df, 20)
-pal=brewer.pal(8,"Blues")
-pal=pal[-(1:3)]
-wordcloud(freq.df$word,freq.df$freq,max.words=100,random.order = F, colors=pal)
+words <- strsplit(as.character(freq.df$word)," ")
+imax <- length(freq.df$word)
+bigram <- data.frame(Bigram=factor(),Freq=integer())
+for(i in 1:imax){
+  if(nchar(words[[i]][1]) > 6 && nchar(words[[i]][2]) > 6){
+    bigram <-rbind(bigram,freq.df[i,])
+  }
+}
+head(bigram, 20)
+
 #trigrams
-TrigramTokenizer <- function(z) NGramTokenizer(z, Weka_control(min = 3, max = 3))
-trigram = TermDocumentMatrix(ch1,control = list(wordLengths = c(7, Inf), tokenize = TrigramTokenizer))
-freq = sort(rowSums(as.matrix(trigram)),decreasing = TRUE)
+trigram_tdm <- TermDocumentMatrix(ch1, control=list(wordLengths = c(7, Inf), tokenize=function(x) ngram_tokenize(x, ngmin=3, ngmax=3)))
+freq = sort(rowSums(as.matrix(trigram_tdm)),decreasing = TRUE)
 freq.df = data.frame(word=names(freq), freq=freq)
 head(freq.df, 20)
-wordcloud(freq.df$word,freq.df$freq,max.words=100,random.order = F, colors=pal)
+words <- strsplit(as.character(freq.df$word)," ")
+imax <- length(freq.df$word)
+trigram <- data.frame(Trigram=factor(),Freq=integer())
+for(i in 1:imax){
+  if(nchar(words[[i]][1]) > 6 && nchar(words[[i]][2]) > 6 && nchar(words[[i]][3]) > 6){
+    trigram <-rbind(trigram,freq.df[i,])
+  }
+}
+head(trigram, 20)
 #the end of Question G#############################################################
 
 #Question H###############################################################
