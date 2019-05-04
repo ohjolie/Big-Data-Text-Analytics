@@ -405,8 +405,16 @@ stri_split_boundaries(stri_trim(text), stri_opts_brkiter(type="sentence"))
 stri_stats_general(text)
 
 #quanteda
+text<-gsub("\n"," ", readtext('StoryOfTheDoor.txt',encoding="UTF-8"))
+text_corpus <- corpus(text)
+summary(text_corpus)
+text_tokens <- tokens(text, remove_punct = TRUE)
+text_tokens
+text_dfm <- dfm(text_tokens)
+tstat_freq <- textstat_frequency(text_dfm, n = 5, groups = "lang")
 
-
+#tidytext
+get_sentiments()
 
 #the end of Question H#############################################################
 
